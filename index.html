@@ -1,1 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Foodpackman</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1a5e1a;
+            --secondary: #0d3c0d;
+            --accent: #ffcc00;
+            --light: #f5f5f5;
+            --dark: #333;
+            --bronze: #cd7f32;
+            --silver: #c0c0c0;
+            --gold: #ffd700;
+            --correct: #4caf50;
+            --incorrect: #f44336;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .logo img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--light);
+            padding: 3px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-align: center;
+        }
+        
+        .timer-container {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .timer-text {
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--accent);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--light);
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--light);
+            cursor: pointer;
+        }
+        
+        .requirements {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        
+        .requirements ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        .requirements li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .requirements li i {
+            margin-right: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .valid {
+            color: var(--correct);
+        }
+        
+        .invalid {
+            color: var(--incorrect);
+        }
+        
+        .btn-register {
+            width: 100%;
+            background: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+        
+        .btn-register:hover {
+            background: #ffd633;
+            transform: scale(1.02);
+        }
+        
+        .btn-register:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .login-link a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid var(--correct);
+            color: var(--correct);
+        }
+        
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid var(--incorrect);
+            color: var(--incorrect);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .timer {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZmZkZDk5IiBkPSJNMjU2IDhDMTE5IDggOCAxMTkgOCAyNTZzMTExIDI0OCAyNDggMjQ4IDI0OC0xMTEgMjQ4LTI0OFMzOTMgOCAyNTYgOHptMCA0NDhjLTExMC41IDAtMjAwLTg5LjUtMjAwLTIwMFMxNDUuNSA1NiAyNTYgNTZzMjAwIDg5LjUgMjAwIDIwMC04OS41IDIwMC0yMDAgMjAweiIvPjxwYXRoIGZpbGw9IiNmZmNjMDAiIGQ9Ik0yU2ggMTQ0Yy0zMC45IDAtNTYuMS0yNS4xLTU2LTU2VjMyYzAtMTcuNyAxNC4zLTMyIDMyLTMyaDQ4YzE3LjcgMCAzMiAxNC4zIDMyIDMydjU2YzAgMzAuOS0yNS4xIDU2LTU2IDU2em0wIDMyMGMtNjYuMiAwLTEyMC01My44LTEyMC0xMjBzNTMuOC0xMjAgMTIwLTEyMCAxMjAgNTMuOCAxMjAgMTIwLTUzLjggMTIwLTEyMCAxMjB6Ii8+PC9zdmc+" alt="Foodpackman">
+            <h1>Foodpackman<br>Registro</h1>
+        </div>
+        
+        <div class="timer-container">
+            <div class="timer" id="timer">02:00:00</div>
+            <div class="timer-text">Tiempo restante para completar el registro</div>
+        </div>
+        
+        <div class="message success" id="success-message">
+            <i class="fas fa-check-circle"></i> Registro exitoso
+        </div>
+        
+        <div class="message error" id="error-message">
+            <i class="fas fa-exclamation-circle"></i> Error en el registro
+        </div>
+        
+        <form id="register-form">
+            <div class="form-group">
+                <label for="nickname"><i class="fas fa-user"></i> Nickname</label>
+                <input type="text" id="nickname" name="nickname" required placeholder="Elige tu nombre de usuario">
+            </div>
+            
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
+                <input type="email" id="email" name="email" required placeholder="tu.correo@ejemplo.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" required placeholder="Crea una contraseña segura">
+                    <button type="button" class="toggle-password" id="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar contraseña</label>
+                <div class="password-container">
+                    <input type="password" id="confirm-password" name="confirm-password" required placeholder="Repite tu contraseña">
+                    <button type="button" class="toggle-password" id="toggle-confirm-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="requirements">
+                <p>La contraseña debe cumplir con:</p>
+                <ul>
+                    <li id="length-req"><i class="fas fa-check-circle valid" id="length-icon"></i> Mínimo 8 caracteres</li>
+                    <li id="uppercase-req"><i class="fas fa-times-circle invalid" id="uppercase-icon"></i> Al menos una mayúscula</li>
+                    <li id="number-req"><i class="fas fa-times-circle invalid" id="number-icon"></i> Al menos un número</li>
+                    <li id="special-req"><i class="fas fa-times-circle invalid" id="special-icon"></i> Al menos un carácter especial</li>
+                    <li id="match-req"><i class="fas fa-times-circle invalid" id="match-icon"></i> Las contraseñas coinciden</li>
+                </ul>
+            </div>
+            
+            <button type="submit" class="btn-register" id="register-btn" disabled>
+                <i class="fas fa-user-plus"></i> Crear cuenta
+            </button>
+        </form>
+        
+        <div class="login-link">
+            ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a>
+        </div>
+    </div>
 
+    <script>
+        // Variables para el temporizador
+        let timeLeft = 2 * 60 * 60; // 2 horas en segundos
+        let timerInterval;
+        
+        // Elementos DOM
+        const timerElement = document.getElementById('timer');
+        const registerForm = document.getElementById('register-form');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+        const registerBtn = document.getElementById('register-btn');
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+        
+        // Iniciar temporizador
+        function startTimer() {
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert('¡Tiempo agotado! Por favor, recarga la página para comenzar de nuevo.');
+                    registerBtn.disabled = true;
+                }
+            }, 1000);
+        }
+        
+        // Actualizar visualización del temporizador
+        function updateTimerDisplay() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            
+            timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Cambiar color cuando quede menos de 5 minutos
+            if (timeLeft < 300) {
+                timerElement.classList.add('pulse');
+                timerElement.style.color = 'var(--incorrect)';
+            } else {
+                timerElement.classList.remove('pulse');
+                timerElement.style.color = 'var(--accent)';
+            }
+        }
+        
+        // Mostrar/ocultar contraseña
+        togglePasswordButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        });
+        
+        // Validar contraseña en tiempo real
+        function validatePassword() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            // Longitud mínima
+            const hasLength = password.length >= 8;
+            document.getElementById('length-icon').className = hasLength ? 
+                'fas fa-check-circle valid' : 'fas fa-times-circle invalid';
+            
+            // Mayúsculas
+            const hasUppercase = /[A-Z]/.test(password);
+            document.getElementById('uppercase-icon').className = hasUppercase ? 
+                'fas fa-check-circle valid' : 'fas fa-times-circle invalid';
+            
+            // Números
+            const hasNumber = /[0-9]/.test(password);
+            document.getElementById('number-icon').className = hasNumber ? 
+                'fas fa-check-circle valid' : 'fas fa-times-circle invalid';
+            
+            // Caracteres especiales
+            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+            document.getElementById('special-icon').className = hasSpecial ? 
+                'fas fa-check-circle valid' : 'fas fa-times-circle invalid';
+            
+            // Coincidencia
+            const passwordsMatch = password === confirmPassword && password !== '';
+            document.getElementById('match-icon').className = passwordsMatch ? 
+                'fas fa-check-circle valid' : 'fas fa-times-circle invalid';
+            
+            // Habilitar botón si todas las validaciones son correctas
+            registerBtn.disabled = !(hasLength && hasUppercase && hasNumber && hasSpecial && passwordsMatch);
+        }
+        
+        // Escuchar cambios en los campos de contraseña
+        passwordInput.addEventListener('input', validatePassword);
+        confirmPasswordInput.addEventListener('input', validatePassword);
+        
+        // Enviar formulario
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obtener datos del formulario
+            const formData = {
+                nickname: document.getElementById('nickname').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                timestamp: new Date().toLocaleString('es-ES')
+            };
+            
+            // Simular envío de correo (en un caso real se usaría un servidor)
+            simulateEmailSend(formData);
+        });
+        
+        // Simular envío de correo
+        function simulateEmailSend(data) {
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            
+            // Simular retraso de red
+            setTimeout(() => {
+                // En un caso real, aquí se haría una petición a un servidor
+                // que enviaría el correo a gastrologianavarro@gmail.com
+                
+                console.log('Datos de registro:', data);
+                console.log('Este correo sería enviado a: gastrologianavarro@gmail.com');
+                
+                // Mostrar mensaje de éxito
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+                
+                // Redireccionar después de 2 segundos
+                setTimeout(() => {
+                    window.location.href = 'juego.html';
+                }, 2000);
+                
+            }, 1500);
+        }
+        
+        // Iniciar cuando la página cargue
+        window.addEventListener('load', startTimer);
+    </script>
+</body>
+  </html>
