@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>"Foodpackman - Cultura Sanvicentana"</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1a5e1a;
+            --secondary: #0d3c0d;
+            --accent: #ffcc00;
+            --light: #f5f5f5;
+            --dark: #333;
+            --bronze: #cd7f32;
+            --silver: #c0c0c0;
+            --gold: #ffd700;
+            --correct: #4caf50;
+            --incorrect: #f44336;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            color: var(--light);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light);
+            padding: 3px;
+        }
+        
+        .logo h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .hamburger {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .hamburger:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .menu-overlay .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            color: var(--light);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            text-align: center;
+        }
+        
+        .menu-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .menu-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+        
+        .section p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .game-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-card i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+        
+        .game-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 90;
+        }
+        
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: color 0.3s, background-color 0.3s;
+        }
+        
+        .nav-btn.active {
+            color: var(--accent);
+            background-color: rgba(255, 204, 0, 0.1);
+        }
+        
+        .nav-btn i {
+            font-size: 1.4rem;
+        }
+        
+        .trivia-container {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .trivia-question {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .trivia-image {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .trivia-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .trivia-option {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .trivia-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .trivia-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .level-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .level-btn {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: var(--light);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .level-btn.active {
+            background-color: var(--accent);
+            color: var(--dark);
+            font-weight: bold;
+        }
+        
+        .level-btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .game-progress {
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .score-board {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            min-width: 500px;
+        }
+        
+        .score-table th, .score-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .score-table th {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .trophy {
+            display: inline-block;
+            margin-right: 5px;
+        }
+        
+        .trophy-gold {
+            color: var(--gold);
+        }
+        
+        .trophy-silver {
+            color: var(--silver);
+        }
+        
+        .trophy-bronze {
+            color: var(--bronze);
+        }
+        
+        .ad-container {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .ad-title {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .ad-content {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .ad-cta {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .ad-cta:hover {
+            background: #ffd633;
+            transform: scale(1.05);
+        }
+        
+        .banner {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .banner-content {
+            text-align: center;
+            z-index: 1;
+            padding: 20px;
+        }
+        
+        .banner h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .banner p {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,10 C20,30 30,20 50,50 S80,70 90,90" stroke="rgba(255,255,255,0.1)" fill="none" stroke-width="2"/></svg>');
+            background-size: cover;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--light);
+        }
+        
+        .form-btn {
+            background: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .form-btn:hover {
+            background: #ffd633;
+            transform: scale(1.05);
+        }
+        
+        .cup-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .cup {
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        .level-complete {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .quiz-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .quiz-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .quiz-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        .quiz-container::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+        
+        .results-container {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .result-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .result-correct {
+            border-left: 5px solid var(--correct);
+        }
+        
+        .result-incorrect {
+            border-left: 5px solid var(--incorrect);
+        }
+        
+        .result-question {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .result-answer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-icon {
+            font-size: 1.2rem;
+        }
+        
+        .correct-icon {
+            color: var(--correct);
+        }
+        
+        .incorrect-icon {
+            color: var(--incorrect);
+        }
+        
+        .score-summary {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .score-item {
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            min-width: 120px;
+        }
+        
+        .score-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .correct-score {
+            color: var(--correct);
+        }
+        
+        .incorrect-score {
+            color: var(--incorrect);
+        }
+        
+        .total-score {
+            color: var(--accent);
+        }
+        
+        .final-results {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .medal-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .medal {
+            font-size: 3rem;
+            color: #ccc;
+        }
+        
+        .medal.gold {
+            color: var(--gold);
+        }
+        
+        .medal.silver {
+            color: var(--silver);
+        }
+        
+        .medal.bronze {
+            color: var(--bronze);
+        }
+        
+        .final-score-display {
+            font-size: 3rem;
+            color: var(--accent);
+            margin: 20px 0;
+        }
+        
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .share-btn {
+            padding: 10px 20px;
+            background: var(--accent);
+            color: var(--dark);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent);
+            opacity: 0;
+            z-index: 1000;
+        }
+        
+        @media (max-width: 768px) {
+            .logo h1 {
+                font-size: 1.2rem;
+            }
+            
+            .section h2 {
+                font-size: 1.6rem;
+            }
+            
+            .game-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .banner h2 {
+                font-size: 1.5rem;
+            }
+            
+            .banner p {
+                font-size: 1rem;
+            }
+            
+            .score-table {
+                font-size: 0.8rem;
+            }
+            
+            .level-selector {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .quiz-container {
+                max-height: 50vh;
+            }
+            
+            .score-summary {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .medal-container {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZmZkZDk5IiBkPSJNMjU2IDhDMTE5IDggOCAxMTkgOCAyNTZzMTExIDI0OCAyNDggMjQ4IDI0OC0xMTEgMjQ4LTI0OFMzOTMgOCAyNTYgOHptMCA0NDhjLTExMC41IDAtMjAwLTg5LjUtMjAwLTIwMFMxNDUuNSA1NiAyNTYgNTZzMjAwIDg5LjUgMjAwIDIwMC04OS41IDIwMC0yMDAgMjAweiIvPjxwYXRoIGZpbGwPSIjZmZjbjAwIiBkPSJNMjU2IDE0NGMtMzAuOSAwLTU2LjEtMjUuMS01NiEtNTZWMzJjMC0xNy43IDE0LjMtMzIgMzItMzJoNDhjMTcuNyAwIDMyIDE0LjMgMzIgMzJ2NTZjMCAzMC45LTI1LjEgNTYtNTYgNTZ6bTAgMzIwYy02Ni4yIDAtMTIwLTUzLjgtMTIwLTEyMHM1My44LTEyMCAxMjAtMTIwIDEyMCA1My44IDEyMCAxMjAtNTMuOCAxMjAtMTIwIDEyMHoiLz48L3N2Zz4=" alt="Escudo San Vicente">
+            <h1>San Vicente de Tagua Tagua</h1>
+        </div>
+        <button class="hamburger">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="menu-overlay">
+        <button class="close-btn">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="menu-links">
+            <a href="#" data-section="inicio">Inicio</a>
+            <a href="#" data-section="historia">Historia</a>
+            <a href="#" data-section="cultura">Cultura</a>
+            <a href="#" data-section="turismo">Turismo</a>
+            <a href="#" data-section="juego">Juego</a>
+            <a href="#" data-section="puntuacion">Puntuación</a>
+            <a href="#" data-section="registro">Registro</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="banner">
+            <div class="banner-content">
+                <h2 >Foodpackman </br>  cultura sanvicentana</h2>
+                <p>8 niveles de desafío cultural te esperan</p>
+            </div>
+        </div>
+
+        <div class="ad-container">
+            <div class="ad-title">¡Visita el Museo de San Vicente!</div>
+            <div class="ad-content">Conoce nuestra historia y tradiciones. Abierto de martes a domingo.</div>
+            <a href="#" class="ad-cta">Más información</a>
+        </div>
+
+        <div id="inicio" class="section active">
+            <h2>Bienvenido a San Vicente de Tagua Tagua</h2>
+            <p>Descubre la riqueza cultural, histórica y natural de esta comuna de la Región de O'Higgins, conocida por su laguna Tagua Tagua, sus hallazgos arqueológicos y su agricultura.</p>
+            
+            <div class="game-container">
+                <div class="game-card" onclick="showSection('historia')">
+                    <i class="fas fa-landmark"></i>
+                    <h3>Historia</h3>
+                    <p>Conoce nuestro pasado milenario</p>
+                </div>
+                <div class="game-card" onclick="showSection('cultura')">
+                    <i class="fas fa-theater-masks"></i>
+                    <h3>Cultura</h3>
+                    <p>Tradiciones y expresiones artísticas</p>
+                </div>
+                <div class="game-card" onclick="showSection('turismo')">
+                    <i class="fas fa-mountain"></i>
+                    <h3>Turismo</h3>
+                    <p>Lugares que debes visitar</p>
+                </div>
+                <div class="game-card" onclick="showSection('juego')">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <h3>Juego Cultural</h3>
+                    <p>Pon a prueba tus conocimientos</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="historia" class="section">
+            <h2>Historia de San Vicente</h2>
+            <p>San Vicente de Tagua Tagua tiene una rica historia que se remonta a más de 12,000 años, con el asentamiento de cazadores-recolectores que habitaban alrededor de la antigua laguna Tagua Tagua.</p>
+            <p>En este lugar se encontraron importantes restos arqueológicos, incluyendo evidencia de megafauna y uno de los asentamientos humanos más antiguos de América.</p>
+        </div>
+
+        <div id="cultura" class="section">
+            <h2>Cultura y Tradiciones</h2>
+            <p>La cultura de San Vicente está marcada por sus fiestas patronales, tradiciones campesinas dan expresiones artísticas que reflejan su identidad rural.</p>
+            <p>Destacan sus fiestas de la vendimia, las competencias de rodeo y las expresiones de artesanía en greda y mimbre.</p>
+        </div>
+
+        <div id="turismo" class="section">
+            <h2>Turismo en la Comuna</h2>
+            <p>San Vicente ofrece diversos atractivos turísticos:</p>
+            <ul>
+                <li>Museo Escolar Laguna Taguatagua (MELT)</li>
+                <li>Iglesia de San Vicente Ferrer</li>
+                <li>Feria de las Pulgas</li>
+                <li>Restos arqueológicos</li>
+                <li>Viñas y bodegas de vino</li>
+            </ul>
+        </div>
+
+        <div id="juego" class="section">
+            <h2>Juego Cultural</h2>
+            <p>Pon a prueba tus conocimientos sobre San Vicente de Tagua Tagua. Selecciona un nivel de dificultad y comienza a jugar.</p>
+            
+            <div class="level-selector">
+                <button class="level-btn active" data-level="1">Nivel 1</button>
+                <button class="level-btn locked" data-level="2">Nivel 2</button>
+                <button class="level-btn locked" data-level="3">Nivel 3</button>
+                <button class="level-btn locked" data-level="4">Nivel 4</button>
+                <button class="level-btn locked" data-level="5">Nivel 5</button>
+                <button class="level-btn locked" data-level="6">Nivel 6</button>
+                <button class="level-btn locked" data-level="7">Nivel 7</button>
+                <button class="level-btn locked" data-level="8">Nivel 8</button>
+            </div>
+            
+            <div class="game-progress">
+                <h3>Progreso: <span id="current-stage">1</span>/8</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 12.5%"></div>
+                </div>
+                <h3>Puntuación: <span id="current-score">0</span></h3>
+            </div>
+            
+            <div id="level-complete-message" style="display: none;">
+                <div class="level-complete">¡Nivel Completado!</div>
+                <div class="cup-container">
+                    <div class="cup"><i class="fas fa-trophy"></i></div>
+                    <p>Has ganado una copa por completar este nivel</p>
+                </div>
+                
+                <div class="score-summary">
+                    <div class="score-item">
+                        <div class="score-number correct-score" id="correct-answers">0</div>
+                        <div>Correctas</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-number incorrect-score" id="incorrect-answers">0</div>
+                        <div>Incorrectas</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-number total-score" id="level-score">0</div>
+                        <div>Puntos</div>
+                    </div>
+                </div>
+                
+                <div class="results-container" id="results-container">
+                    <!-- Los resultados se mostrarán aquí -->
+                </div>
+                
+                <button class="form-btn" onclick="nextLevel()" style="margin-top: 20px;" id="next-level-btn">Continuar al siguiente nivel</button>
+                <button class="form-btn" onclick="showFinalResults()" style="margin-top: 20px; display: none;" id="final-results-btn">Ver resultados finales</button>
+            </div>
+            
+            <div class="quiz-container" id="quiz-container">
+                <!-- Las preguntas se cargarán aquí dinámicamente -->
+            </div>
+            
+            <button class="form-btn" onclick="checkQuiz()" style="margin-top: 20px;" id="check-quiz-btn">Verificar Respuestas</button>
+        </div>
+
+        <div id="puntuacion" class="section">
+            <h2>Tabla de Puntuaciones</h2>
+            <p>Estas son las mejores puntuaciones del juego cultural:</p>
+            
+            <div class="score-board">
+                <div class="score-table-container">
+                    <table class="score-table">
+                        <thead>
+                            <tr>
+                                <th>Posición</th>
+                                <th>Jugador</th>
+                                <th>Puntuación</th>
+                                <th>Nivel</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="score-table-body">
+                            <tr>
+                                <td>1 <span class="trophy trophy-gold"><i class="fas fa-trophy"></i></span></td>
+                                <td>Juan Pérez</td>
+                                <td>8500</td>
+                                <td>8</td>
+                                <td>15/08/2023</td>
+                            </tr>
+                            <tr>
+                                <td>2 <span class="trophy trophy-silver"><i class="fas fa-trophy"></i></span></td>
+                                <td>María González</td>
+                                <td>8200</td>
+                                <td>8</td>
+                                <td>14/08/2023</td>
+                            </tr>
+                            <tr>
+                                <td>3 <span class="trophy trophy-bronze"><i class="fas fa-trophy"></i></span></td>
+                                <td>Carlos López</td>
+                                <td>7800</td>
+                                <td>8</td>
+                                <td>13/08/2023</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="registro" class="section">
+            <h2>Registro de Usuario</h2>
+            <p>Regístrate para guardar tus puntuaciones y participar en el ranking.</p>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="name">Nombre completo</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Edad</label>
+                    <input type="number" id="age" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">¿Eres de San Vicente?</label>
+                    <select id="location" required>
+                        <option value="">Selecciona una opción</option>
+                        <option value="si">Sí, vivo en San Vicente</option>
+                        <option value="no">No, pero visito frecuentemente</option>
+                        <option value="interes">No, pero me interesa su cultura</option>
+                    </select>
+                </div>
+                <button type="submit" class="form-btn">Registrarse</button>
+            </form>
+        </div>
+
+        <div id="final-results" class="section">
+            <div class="final-results">
+                <h2>¡Felicidades! Has completado todos los niveles</h2>
+                <div class="final-score-display" id="final-score-display">0</div>
+                
+                <div class="medal-container">
+                    <div class="medal gold" id="gold-medal"><i class="fas fa-medal"></i></div>
+                    <div class="medal silver" id="silver-medal"><i class="fas fa-medal"></i></div>
+                    <div class="medal bronze" id="bronze-medal"><i class="fas fa-medal"></i></div>
+                </div>
+                
+                <p id="final-message">¡Excelente trabajo! Eres un verdadero conocedor de San Vicente de Tagua Tagua.</p>
+                
+                <div class="share-buttons">
+                    <button class="share-btn" onclick="shareScore()">
+                        <i class="fas fa-share-alt"></i> Compartir puntuación
+                    </button>
+                    <button class="share-btn" onclick="playAgain()">
+                        <i class="fas fa-redo"></i> Jugar de nuevo
+                    </button>
+                </div>
+                
+                <div class="results-container" id="final-results-container">
+                    <!-- Los resultados finales se mostrarán aquí -->
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-container">
+            <div class="ad-title">¡Fiesta de la Vendimia 2023!</div>
+            <div class="ad-content">No te pierdas la celebración más importante de la comuna. Del 15 al 20 de marzo.</div>
+            <a href="#" class="ad-cta">Ver programa</a>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="nav-btn active" onclick="showSection('inicio')">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('historia')">
+            <i class="fas fa-history"></i>
+            <span>Historia</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('cultura')">
+            <i class="fas fa-music"></i>
+            <span>Cultura</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('turismo')">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Turismo</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('juego')">
+            <i class="fas fa-gamepad"></i>
+            <span>Juego</span>
+        </button>
+    </div>
+
+    <script>
+        // Función para mezclar array (algoritmo Fisher-Yates)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Función para aleatorizar las opciones de respuesta
+        function randomizeQuestionOptions(question) {
+            // Crear un array de índices [0, 1, 2, 3]
+            const indices = [0, 1, 2, 3];
+            
+            // Mezclar los índices
+            shuffleArray(indices);
+            
+            // Crear nuevas opciones en el orden aleatorio
+            const newOptions = indices.map(index => question.opciones[index]);
+            
+            // Encontrar la nueva posición de la respuesta correcta
+            const newCorrectAnswer = indices.indexOf(question.respuesta);
+            
+            return {
+                pregunta: question.pregunta,
+                opciones: newOptions,
+                respuesta: newCorrectAnswer
+            };
+        }
+
+        // Base de datos de preguntas con 8 niveles y 10 preguntas cada uno (80 preguntas total)
+        // Primero definimos las preguntas originales
+        const originalQuestionsDatabase = {
+            niveles: [
+                {
+                    id: 1,
+                    nombre: "Nivel Básico",
+                    puntosPorPregunta: 100,
+                    preguntas: [
+                        {
+                            pregunta: "¿En qué región de Chile se encuentra San Vicente de Tagua Tagua?",
+                            opciones: ["Región de O'Higgins", "Región del Maule", "Región de Valparaíso", "Región Metropolitana"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué famosa laguna existió en la zona de San Vicente?",
+                            opciones: ["Laguna Tagua Tagua", "Laguna del Inca", "Laguna de Aculeo", "Laguna Chica de San Vicente"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Cuál es un producto típico de la zona?",
+                            opciones: ["Vino", "Manzanas", "Aceitunas", "Naranjas"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿En qué año se fundó oficialmente la comuna de San Vicente de Tagua Tagua?",
+                            opciones: ["1850", "1871", "1905", "1823"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué animal prehistórico fue encontrado en la laguna Tagua Tagua?",
+                            opciones: ["Mastodonte", "Tiranosaurio Rex", "Mamut Lanudo", "Dientes de Sable"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Cuál es la principal actividad económica de San Vicente?",
+                            opciones: ["Agricultura", "Minería", "Pesca", "Industria"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué cultivo es característico de la comuna?",
+                            opciones: ["Uvas", "Manzanas", "Trigo", "Maíz"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Cómo se llama el museo principal de San Vicente?",
+                            opciones: ["Museo Escolar Laguna Taguatagua", "Museo Arqueológico de San Vicente", "Museo Histórico de la Laguna", "Museo del Huaso"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué fiesta tradicional se celebra en San Vicente?",
+                            opciones: ["Fiesta de la Vendimia", "Fiesta de la Primavera", "Fiesta del Huaso", "Fiesta del Chancho"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Aproximadamente hace cuántos años se tienen registros de los primeros habitantes de la zona?",
+                            opciones: ["12,000 años", "5,000 años", "8,000 años", "15,000 años"],
+                            respuesta: 0
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    nombre: "Nivel Intermedio",
+                    puntosPorPregunta: 200,
+                    preguntas: [
+                        {
+                            pregunta: "¿Qué antigua laguna fue drenada para convertirla en tierra cultivable?",
+                            opciones: ["Laguna Tagua Tagua", "Laguna de Aculeo", "Laguna del Inca", "Laguna Rapel"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿En qué década se realizaron los principales hallazgos arqueológicos en la zona?",
+                            opciones: ["Década de 1960", "Década de 1970", "Década de 1980", "Década de 1990"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tipo de megafauna se encontró en la laguna Tagua Tagua?",
+                            opciones: ["Mastodontes y Milodones", "Tigres dientes de sable", "Dinosaurios", "Osos gigantes"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Cuál es el principal cultivo de la comuna?",
+                            opciones: ["Vid para vino", "Manzanas", "Trigo", "Maíz"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué reconocida viña se encuentra en San Vicente?",
+                            opciones: ["Viña Santa Emiliana", "Viña Concha y Toro", "Viña Santa Rita", "Viña Undurraga"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué artefacto prehistórico se ha encontrado en la zona?",
+                            opciones: ["Puntas de flecha", "Armaduras", "Esculturas", "Instrumentos musicales"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tribus indígenas habitaron la zona?",
+                            opciones: ["Picunches", "Mapuches", "Diaguitas", "Rapa Nui"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué producto artesanal es típico de San Vicente?",
+                            opciones: ["Artesanía en mimbre", "Alfarería", "Textiles", "Cestería"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿En qué mes se celebra la fiesta de la Vendimia?",
+                            opciones: ["Marzo", "Abril", "Mayo", "Junio"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué deporte tradicional se practica en la comuna?",
+                            opciones: ["Rodeo", "Fútrol", "Tenis", "Básquetbol"],
+                            respuesta: 0
+                        }
+                    ]
+                },
+                {
+                    id: 3,
+                    nombre: "Nivel Avanzado",
+                    puntosPorPregunta: 300,
+                    preguntas: [
+                        {
+                            pregunta: "¿Qué cerro es un referente geográfico de San Vicente?",
+                            opciones: ["Cerro La Muralla", "Cerro San Cristóbal", "Cerro Santa Lucía", "Cerro El Plomo"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué río pasa cerca de San Vicente?",
+                            opciones: ["Río Cachapoal", "Río Maipo", "Río Mapocho", "Río Biobío"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué distingue a la artesanía local?",
+                            opciones: ["Trabajos en mimbre y cuero", "Textiles", "Alfarería", "Tallado en madera"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué actividad económica complementa a la agricultura?",
+                            opciones: ["Ganadería", "Minería", "Pesca", "Industria"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué santuario natural se encuentra en la comuna?",
+                            opciones: ["Laguna de Tagua Tagua", "Cerro La Muralla", "Río Cachapoal", "Valle de San Vicente"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué importante hallazgo arqueológico se realizó en la antigua laguna?",
+                            opciones: ["Restos de un asentamiento humano con evidencias de caza de megafauna", "Restos de un templo indígena", "Pinturas rupestres", "Un cementerio precolombino"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué significa 'Tagua Tagua' en lengua indígena?",
+                            opciones: ["Lugar donde se cazan taguas", "Laguna de las taguas", "Tierra fértil", "Agua que brota"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué famoso personaje histórico nació en San Vicente?",
+                            opciones: ["Ninguno de los mencionados", "Arturo Prat", "Bernardo O'Higgins", "Diego Portales"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Cuál es el plato típico de San Vicente?",
+                            opciones: ["Cazuela de ave", "Empanadas de horno", "Asado", "Charquicán"],
+                            respuesta: 3
+                        },
+                        {
+                            pregunta: "¿Qué mes se celebra la Fiesta de la Vendimia?",
+                            opciones: ["Marzo", "Abril", "Mayo", "Junio"],
+                            respuesta: 0
+                        }
+                    ]
+                },
+                {
+                    id: 4,
+                    nombre: "Nivel Experto",
+                    puntosPorPregunta: 400,
+                    preguntas: [
+                        {
+                            pregunta: "¿En qué año se encontraron los primeros restos de mastodontes en la laguna?",
+                            opciones: ["1842", "1895", "1921", "1950"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué investigador chileno es reconocido por sus estudios en la laguna Tagua Tagua?",
+                            opciones: ["Rubén Stehberg", "Julio Montané", "Grete Mostny", "Francisco Cornely"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué instrumento de caza se ha encontrado en los yacimientos arqueológicos?",
+                            opciones: ["Puntas de proyectil", "Arcos y flechas", "Hondas", "Boleadoras"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Cuál es el nombre del principal club de rodeo de San Vicente?",
+                            opciones: ["Club de Rodeo Laguna de Tagua Tagua", "Club de Rodeo San Vicente", "Club de Rodeo Huasos de la Laguna", "Club de Rodeo El Trébol"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué fruto seco es típico de la zona?",
+                            opciones: ["Nueces", "Almendras", "Avellanas", "Castañas"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué artista local es reconocido por sus esculturas en madera?",
+                            opciones: ["Juan de Dios Silva", "Pedro Lobos", "Mario Carreño", "Nemesio Antúnez"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿En qué año se creó el Museo Escolar Laguna Taguatagua?",
+                            opciones: ["1975", "1982", "1990", "1995"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué ave acuática da nombre a la laguna?",
+                            opciones: ["Tagua", "Pato", "Cisne", "Garza"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué producto de exportación es importante para la comuna?",
+                            opciones: ["Vinos de exportación", "Manzanas", "Nueces", "Miel"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué antigua actividad se realizaba en la laguna antes de its desecación?",
+                            opciones: ["Caza de taguas", "Pesca", "Navegación", "Extracción de sal"],
+                            respuesta: 0
+                        }
+                    ]
+                },
+                {
+                    id: 5,
+                    nombre: "Nivel Maestro",
+                    puntosPorPregunta: 500,
+                    preguntas: [
+                        {
+                            pregunta: "¿Qué tipo de roca predomina en el cerro La Muralla?",
+                            opciones: ["Roca volcánica", "Roca sedimentaria", "Roca metamórfica", "Granito"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué famoso poeta chileno escribió sobre la laguna Tagua Tagua?",
+                            opciones: ["Pablo Neruda", "Vicente Huidobro", "Nicanor Parra", "Gabriela Mistral"],
+                            respuesta: 3
+                        },
+                        {
+                            pregunta: "¿En qué año se secó completamente la laguna Tagua Tagua?",
+                            opciones: ["1841", "1865", "1890", "1912"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué herramienta prehistórica es característica de los hallazgos arqueológicos?",
+                            opciones: ["Piedras talladas", "Puntas de flecha de obsidiana", "Hachas de piedra", "Arpones de hueso"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué especie de árbol es emblemática de la comuna?",
+                            opciones: ["Espino", "Peumo", "Boldo", "Quillay"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué institución educativa es la más antigua de San Vicente?",
+                            opciones: ["Escuela D-36", "Liceo Municipal", "Escuela San Vicente", "Colegio Laguna Tagua Tagua"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tipo de clima predomina en San Vicente?",
+                            opciones: ["Clima mediterráneo", "Clima templado", "Clima semiárido", "Clima continental"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué producto ganadero es importante en la comuna?",
+                            opciones: ["Queso de cabra", "Mantequilla", "Yogurt", "Leche"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué baile tradicional se practica en las fiestas patronales?",
+                            opciones: ["Cueca", "Sajuriana", "Refalosa", "Guaracha campesina"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿En qué año se declaró Monumento Histórico los sitios arqueológicos de la laguna?",
+                            opciones: ["1975", "1982", "1990", "1995"],
+                            respuesta: 1
+                        }
+                    ]
+                },
+                {
+                    id: 6,
+                    nombre: "Nivel Experto Superior",
+                    puntosPorPregunta: 600,
+                    preguntas: [
+                        {
+                            pregunta: "¿Qué tipo de suelo predomina en la zona de San Vicente?",
+                            opciones: ["Suelo arcilloso", "Suelo arenoso", "Suelo volcánico", "Suelo aluvial"],
+                            respuesta: 3
+                        },
+                        {
+                            pregunta: "¿Qué artista visual sanvicentano es conocido por sus paisajes?",
+                            opciones: ["Luis González", "Carlos Maturana", "Pedro Reveco", "Juan Francisco González"],
+                            respuesta: 2
+                        },
+                        {
+                            pregunta: "¿Qué antigua actividad minera se desarrolló en la comuna?",
+                            opciones: ["Extracción de carbón", "Extracción de cobre", "Extracción de caliza", "Extracción de oro"],
+                            respuesta: 2
+                        },
+                        {
+                            pregunta: "¿Qué especie de cactus es común en los cerros de San Vicente?",
+                            opciones: ["Quisco", "Copiapoa", "Echinopsis", "Eulychnia"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué institución se encarga de preservar el patrimonio cultural de San Vicente?",
+                            opciones: ["Corporación Cultural", "Museo Escolar Laguna Taguatagua", "Municipalidad", "Junta de Vecinos"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tipo de vino es el más producido en la comuna?",
+                            opciones: ["Carménère", "Cabernet Sauvignon", "Merlot", "Chardonnay"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué ave rapaz es común en los cielos de San Vicente?",
+                            opciones: ["Águila", "Peuco", "Tiuque", "Halconcito"],
+                            respuesta: 2
+                        },
+                        {
+                            pregunta: "¿Qué antigua estación de ferrocarril existió en San Vicente?",
+                            opciones: ["Estación San Vicente", "Estación Tagua Tagua", "Estación La Laguna", "Estación Rosario"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué tipo de artesanía en mimbre es característica?",
+                            opciones: ["Canastos", "Muebles", "Figuras decorativas", "Lámparas"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué premio ha recibido el Museo Escolar Laguna Taguatagua?",
+                            opciones: ["Premio Nacional de Museología", "Premio a la Conservación del Patrimonio", "Premio Iberoamericano de Educación", "Premio Marta Brunet"],
+                            respuesta: 1
+                        }
+                    ]
+                },
+                {
+                    id: 7,
+                    nombre: "Nivel Investigador",
+                    puntosPorPregunta: 700,
+                    preguntas: [
+                        {
+                            pregunta: "¿Qué fósil marino se ha encontrado en los cerros de San Vicente?",
+                            opciones: ["Ammonites", "Trilobites", "Belemnites", "Dientes de megalodón"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué poeta local escribió 'Cantos a mi Laguna'?",
+                            opciones: ["Juan de Dios Silva", "Pedro Reveco", "Luis González", "Carlos Maturana"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tipo de sistema de regadío tradicional se usaba en la comuna?",
+                            opciones: ["Canales de regadío", "Norias", "Acequias", "Estanques"],
+                            respuesta: 2
+                        },
+                        {
+                            pregunta: "¿Qué mamífero pequeño es endémico de la zona?",
+                            opciones: ["Cururo", "Degú", "Laucha de pelo largo", "Ratón oliváceo"],
+                            respuesta: 3
+                        },
+                        {
+                            pregunta: "¿Qué tipo de cerámica precolombina se ha encontrado en la zona?",
+                            opciones: ["Cerámica Llolleo", "Cerámica Aconcagua", "Cerámica Diaguita", "Cerámica El Molle"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué instrumento musical tradicional se usa en las fiestas?",
+                            opciones: ["Guitarrón", "Arpa", "Acordeón", "Pandero"],
+                            respuesta: 2
+                        },
+                        {
+                            pregunta: "¿Qué tipo de danza ritual se practicaba en la laguna?",
+                            opciones: ["Danza de la lluvia", "Danza de la caza", "Danza de la fertilidad", "Danza del sol"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué tipo de piedra semipreciosa se encuentra en la zona?",
+                            opciones: ["Lapislázuli", "Ágata", "Cuarzo", "Ópalo"],
+                            respuesta: 2
+                        },
+                        {
+                            pregunta: "¿Qué tipo de arquitectura colonial predomina en el pueblo?",
+                            opciones: ["Estilo chileno", "Estilo español", "Estilo neoclásico", "Estilo colonial americano"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tipo de hierbas medicinales se recolectan en los cerros?",
+                            opciones: ["Boldo y Peumo", "Matico y Paico", "Canelo y Laurel", "Litre y Quillay"],
+                            respuesta: 1
+                        }
+                    ]
+                },
+                {
+                    id: 8,
+                    nombre: "Nivel Maestro Supremo",
+                    puntosPorPregunta: 800,
+                    preguntas: [
+                        {
+                            pregunta: "¿Qué tipo de fósil vegetal se ha encontrado en los estratos de la laguna?",
+                            opciones: ["Hojas de Nothofagus", "Troncos de Araucaria", "Semillas de Palma", "Espigas de trigo ancestral"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué investigadora realizó importantes estudios sobre la megafauna de Tagua Tagua?",
+                            opciones: ["Grete Mostny", "Isabel Cruz", "Lautaro Núñez", "Virginia Varela"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tipo de técnica de caza utilizaban los antiguos habitantes?",
+                            opciones: ["Técnica de emboscada", "Técnica de acorralamiento", "Técnica de trampas", "Técnica de persecución"],
+                            respuesta: 1
+                        },
+                        {
+                            pregunta: "¿Qué tipo de pigmentos usaban para sus pinturas rupestres?",
+                            opciones: ["Óxidos de hierro", "Carbón vegetal", "Arcilla coloreada", "Jugos de plantas"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tipo de estructura habitacional se ha encontrado en los yacimientos?",
+                            opciones: ["Chozas de paja", "Cuevas", "Paravientos", "Viviendas semisubterráneas"],
+                            respuesta: 3
+                        },
+                        {
+                            pregunta: "¿Qué tipo de ritual funerario practicaban los antiguos habitantes?",
+                            opciones: ["Entierro en posición fetal", "Cremación", "Entierro en canoas", "Momificación"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tipo de instrumento musical precolombino se ha encontrado?",
+                            opciones: ["Flautas de hueso", "Tambores de cuero", "Cascabeles de semillas", "Sonajeros de calabaza"],
+                            respuesta: 0
+                        },
+                        {
+                            pregunta: "¿Qué tipo de cambio climático afectó la desecación de la laguna?",
+                            opciones: ["Periodo de sequía prolongada", "Calentamiento global", "Cambio en las precipitaciones", "Desvío de afluentes"],
+                            respuesta: 2
+                        },
+                        {
+                            pregunta: "¿Qué tipo de técnica de pesca utilizaban en la laguna?",
+                            opciones: ["Redes", "Arpones", "Trampas de mimbre", "Sedal con anzuelos"],
+                            respuesta: 2
+                        },
+                        {
+                            pregunta: "¿Qué tipo de organización social tenían los antiguos habitantes?",
+                            opciones: ["Bandas familiares", "Tribus organizadas", "Cacicazgos", "Comunidades igualitarias"],
+                            respuesta: 0
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Crear una copia de la base de datos original y aleatorizar las opciones
+        const questionsDatabase = {
+            niveles: originalQuestionsDatabase.niveles.map(nivel => ({
+                ...nivel,
+                preguntas: nivel.preguntas.map(randomizeQuestionOptions)
+            }))
+        };
+
+        // Variables de estado del juego
+        let currentLevel = 1;
+        let score = 0;
+        let maxLevel = 8;
+        let userAnswers = [];
+        let currentQuestions = [];
+        let allLevelsResults = [];
+
+        // Funcionalidad del menú hamburguesa
+        const hamburger = document.querySelector('.hamburger');
+        const menuOverlay = document.querySelector('.menu-overlay');
+        const closeBtn = document.querySelector('.close-btn');
+        const menuLinks = document.querySelectorAll('.menu-links a');
+        
+        hamburger.addEventListener('click', () => {
+            menuOverlay.classList.add('active');
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            menuOverlay.classList.remove('active');
+        });
+        
+        menuLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = link.getAttribute('data-section');
+                showSection(section);
+                menuOverlay.classList.remove('active');
+            });
+        });
+        
+        // Funcionalidad de navegación
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Actualizar botones de navegación inferiores
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const correspondingBtn = document.querySelector(`.nav-btn[onclick="showSection('${sectionId}')"]`);
+            if (correspondingBtn) {
+                correspondingBtn.classList.add('active');
+            }
+            
+            // Si es la sección de juego, cargar las preguntas
+            if (sectionId === 'juego') {
+                loadQuestions();
+            }
+        }
+        
+        // Selector de nivel
+        const levelButtons = document.querySelectorAll('.level-btn');
+        levelButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const level = parseInt(btn.getAttribute('data-level'));
+                if (!btn.classList.contains('locked')) {
+                    levelButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentLevel = level;
+                    document.getElementById('level-complete-message').style.display = 'none';
+                    document.getElementById('quiz-container').style.display = 'block';
+                    document.getElementById('check-quiz-btn').style.display = 'block';
+                    loadQuestions();
+                }
+            });
+        });
+        
+        // Cargar preguntas del nivel actual
+        function loadQuestions() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = '';
+            
+            // Obtener preguntas del nivel actual
+            const nivel = questionsDatabase.niveles.find(n => n.id === currentLevel);
+            if (!nivel) {
+                quizContainer.innerHTML = '<p>No hay preguntas disponibles para este nivel.</p>';
+                return;
+            }
+            
+            // Mezclar preguntas para que aparezcan en orden aleatorio
+            currentQuestions = [...nivel.preguntas];
+            shuffleArray(currentQuestions);
+            
+            currentQuestions.forEach((question, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'trivia-container';
+                questionElement.innerHTML = `
+                    <div class="trivia-question">${index + 1}. ${question.pregunta}</div>
+                    <div class="trivia-options">
+                        ${question.opciones.map((opcion, i) => `
+                            <div class="trivia-option">
+                                <input type="radio" name="question-${index}" value="${i}" id="q${index}-opt${i}">
+                                <label for="q${index}-opt${i}">${opcion}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                quizContainer.appendChild(questionElement);
+            });
+            
+            // Actualizar progreso
+            document.getElementById('current-stage').textContent = currentLevel;
+            document.getElementById('progress-fill').style.width = `${(currentLevel / maxLevel) * 100}%`;
+            document.getElementById('current-score').textContent = score;
+        }
+        
+        // Verificar respuestas del cuestionario
+        function checkQuiz() {
+            const quizContainer = document.getElementById('quiz-container');
+            const questions = quizContainer.querySelectorAll('.trivia-container');
+            let correctAnswers = 0;
+            let incorrectAnswers = 0;
+            let levelScore = 0;
+            userAnswers = [];
+            
+            const nivel = questionsDatabase.niveles.find(n => n.id === currentLevel);
+            const puntosPorPregunta = nivel.puntosPorPregunta;
+            
+            questions.forEach((question, index) => {
+                const selectedOption = question.querySelector('input[type="radio"]:checked');
+                const options = question.querySelectorAll('.trivia-option');
+                
+                let userAnswer = -1;
+                if (selectedOption) {
+                    userAnswer = parseInt(selectedOption.value);
+                }
+                
+                const correctAnswer = currentQuestions[index].respuesta;
+                const isCorrect = userAnswer === correctAnswer;
+                
+                // Guardar la respuesta del usuario
+                userAnswers.push({
+                    question: currentQuestions[index].pregunta,
+                    userAnswer: userAnswer,
+                    correctAnswer: correctAnswer,
+                    options: currentQuestions[index].opciones,
+                    isCorrect: isCorrect,
+                    points: isCorrect ? puntosPorPregunta : 0
+                });
+                
+                if (isCorrect) {
+                    correctAnswers++;
+                    levelScore += puntosPorPregunta;
+                } else {
+                    incorrectAnswers++;
+                }
+                
+                // Deshabilitar todas las opciones
+                options.forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                });
+            });
+            
+            // Calcular puntuación
+            if (correctAnswers + incorrectAnswers === currentQuestions.length) {
+                score += levelScore;
+                document.getElementById('current-score').textContent = score;
+                
+                // Guardar resultados del nivel
+                allLevelsResults[currentLevel - 1] = {
+                    level: currentLevel,
+                    correctAnswers: correctAnswers,
+                    incorrectAnswers: incorrectAnswers,
+                    levelScore: levelScore,
+                    userAnswers: userAnswers
+                };
+                
+                // Mostrar resultados
+                showResults(correctAnswers, incorrectAnswers, levelScore);
+                
+                // Mostrar mensaje de nivel completado
+                document.getElementById('quiz-container').style.display = 'none';
+                document.getElementById('check-quiz-btn').style.display = 'none';
+                document.getElementById('level-complete-message').style.display = 'block';
+                
+                // Mostrar botón de resultados finales si es el último nivel
+                if (currentLevel === maxLevel) {
+                    document.getElementById('next-level-btn').style.display = 'none';
+                    document.getElementById('final-results-btn').style.display = 'block';
+                } else {
+                    document.getElementById('next-level-btn').style.display = 'block';
+                    document.getElementById('final-results-btn').style.display = 'none';
+                }
+                
+                // Mostrar animación de confeti si pasó el nivel
+                if (correctAnswers >= 6) {
+                    createConfetti();
+                    
+                    // Desbloquear siguiente nivel
+                    if (currentLevel < maxLevel) {
+                        const nextLevelBtn = document.querySelector(`.level-btn[data-level="${currentLevel + 1}"]`);
+                        nextLevelBtn.classList.remove('locked');
+                    }
+                }
+            } else {
+                alert("Debes responder todas las preguntas antes de verificar.");
+            }
+        }
+        
+        // Mostrar resultados del nivel
+        function showResults(correct, incorrect, levelScore) {
+            document.getElementById('correct-answers').textContent = correct;
+            document.getElementById('incorrect-answers').textContent = incorrect;
+            document.getElementById('level-score').textContent = levelScore;
+            
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = '';
+            
+            userAnswers.forEach((answer, index) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${answer.isCorrect ? 'result-correct' : 'result-incorrect'}`;
+                
+                resultItem.innerHTML = `
+                    <div class="result-question">${index + 1}. ${answer.question}</div>
+                    <div class="result-answer">
+                        <span class="result-icon ${answer.isCorrect ? 'correct-icon' : 'incorrect-icon'}">
+                            <i class="fas ${answer.isCorrect ? 'fa-check' : 'fa-times'}"></i>
+                        </span>
+                        <span>
+                            ${answer.userAnswer === -1 ? 
+                                'No respondiste' : 
+                                `Tu respuesta: ${answer.options[answer.userAnswer]}`}
+                            ${!answer.isCorrect ? `<br>Respuesta correcta: ${answer.options[answer.correctAnswer]}` : ''}
+                            ${answer.isCorrect ? `<br><strong>+${answer.points} puntos</strong>` : ''}
+                        </span>
+                    </div>
+                `;
+                
+                resultsContainer.appendChild(resultItem);
+            });
+        }
+        
+        // Siguiente nivel
+        function nextLevel() {
+            if (currentLevel < maxLevel) {
+                currentLevel++;
+                
+                // Actualizar botón de nivel activo
+                levelButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (parseInt(btn.getAttribute('data-level')) === currentLevel) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                document.getElementById('level-complete-message').style.display = 'none';
+                document.getElementById('quiz-container').style.display = 'block';
+                document.getElementById('check-quiz-btn').style.display = 'block';
+                
+                loadQuestions();
+            } else {
+                showFinalResults();
+            }
+        }
+        
+        // Mostrar resultados finales
+        function showFinalResults() {
+            // Calcular puntuación total
+            let totalCorrect = 0;
+            let totalIncorrect = 0;
+            
+            allLevelsResults.forEach(result => {
+                if (result) {
+                    totalCorrect += result.correctAnswers;
+                    totalIncorrect += result.incorrectAnswers;
+                }
+            });
+            
+            // Mostrar sección de resultados finales
+            showSection('final-results');
+            
+            // Actualizar puntuación final
+            document.getElementById('final-score-display').textContent = score;
+            
+            // Mostrar medallas según el puntaje
+            const goldMedal = document.getElementById('gold-medal');
+            const silverMedal = document.getElementById('silver-medal');
+            const bronzeMedal = document.getElementById('bronze-medal');
+            const finalMessage = document.getElementById('final-message');
+            
+            if (score >= 4000) {
+                goldMedal.classList.add('gold');
+                finalMessage.textContent = "¡Excelente trabajo! Eres un verdadero experto en San Vicente de Tagua Tagua.";
+            } else if (score >= 3000) {
+                silverMedal.classList.add('silver');
+                finalMessage.textContent = "¡Muy buen trabajo! Tienes un gran conocimiento sobre San Vicente de Tagua Tagua.";
+            } else if (score >= 2000) {
+                bronzeMedal.classList.add('bronze');
+                finalMessage.textContent = "¡Buen trabajo! Conoces bastante sobre San Vicente de Tagua Tagua.";
+            } else {
+                finalMessage.textContent = "¡Sigue aprendiendo! Puedes mejorar tu conocimiento sobre San Vicente de Tagua Tagua.";
+            }
+            
+            // Mostrar resumen de todos los niveles
+            const finalResultsContainer = document.getElementById('final-results-container');
+            finalResultsContainer.innerHTML = '<h3>Resumen por Niveles</h3>';
+            
+            allLevelsResults.forEach((result, index) => {
+                if (result) {
+                    const nivelResumen = document.createElement('div');
+                    nivelResumen.className = 'result-item';
+                    nivelResumen.innerHTML = `
+                        <div class="result-question">Nivel ${result.level}: ${questionsDatabase.niveles[index].nombre}</div>
+                        <div class="result-answer">
+                            <span>Correctas: ${result.correctAnswers}/10</span>
+                            <span> | Puntos: ${result.levelScore}</span>
+                        </div>
+                    `;
+                    finalResultsContainer.appendChild(nivelResumen);
+                }
+            });
+            
+            // Agregar resumen total
+            const totalResumen = document.createElement('div');
+            totalResumen.className = 'result-item';
+            totalResumen.innerHTML = `
+                <div class="result-question">TOTAL</div>
+                <div class="result-answer">
+                    <span>Correctas: ${totalCorrect}/${maxLevel * 10}</span>
+                    <span> | Puntuación Total: ${score}</span>
+                </div>
+            `;
+            finalResultsContainer.appendChild(totalResumen);
+        }
+        
+        // Compartir puntuación
+        function shareScore() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mi puntuación en el Juego Cultural de San Vicente',
+                    text: `¡Obtuve ${score} puntos en el Juego Cultural de San Vicente de Tagua Tagua! ¿Podrás superarme?`,
+                    url: window.location.href
+                })
+                .catch(error => {
+                    console.log('Error al compartir:', error);
+                    alert('¡Puntuación copiada al portapapeles! Compártela manualmente.');
+                    copyToClipboard(`¡Obtuve ${score} puntos en el Juego Cultural de San Vicente de Tagua Tagua!`);
+                });
+            } else {
+                alert('¡Puntuación copiada al portapapeles! Compártela manualmente.');
+                copyToClipboard(`¡Obtuve ${score} puntos en el Juego Cultural de San Vicente de Tagua Tagua!`);
+            }
+        }
+        
+        // Copiar al portapapeles
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+        
+        // Jugar de nuevo
+        function playAgain() {
+            // Reiniciar variables del juego
+            currentLevel = 1;
+            score = 0;
+            userAnswers = [];
+            allLevelsResults = [];
+            
+            // Bloquear todos los niveles excepto el primero
+            levelButtons.forEach(btn => {
+                if (parseInt(btn.getAttribute('data-level')) !== 1) {
+                    btn.classList.add('locked');
+                } else {
+                    btn.classList.remove('locked');
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Mostrar sección de juego
+            showSection('juego');
+        }
+        
+        // Crear animación de confeti
+        function createConfetti() {
+            const colors = ['#ffcc00', '#1a5e1a', '#0d3c0d', '#ffffff'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animation = `confetti ${1 + Math.random() * 2}s linear forwards`;
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                
+                // Eliminar el confeti después de la animación
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+        
+        // Registro de usuario
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('¡Registro exitoso! Ahora puedes guardar tus puntuaciones.');
+            this.reset();
+        });
+        
+        // Rotar publicidad
+        const ads = [
+            {
+                title: "¡Visita el Museo de San Vicente!",
+                content: "Conoce nuestra historia y tradiciones. Abierto de martes a domingo.",
+                cta: "Más información"
+            },
+            {
+                title: "¡Fiesta de la Vendimia 2023!",
+                content: "No te pierdas la celebración más importante de la comuna. Del 15 al 20 de marzo.",
+                cta: "Ver programa"
+            },
+            {
+                title: "Tours Guiados por la Comuna",
+                content: "Descubre los secretos de San Vicente con nuestros guías especializados.",
+                cta: "Reservar ahora"
+            }
+        ];
+        
+        let currentAd = 0;
+        
+        function rotateAd() {
+            const adContainers = document.querySelectorAll('.ad-container');
+            const ad = ads[currentAd];
+            
+            adContainers.forEach(container => {
+                container.innerHTML = `
+                    <div class="ad-title">${ad.title}</div>
+                    <div class="ad-content">${ad.content}</div>
+                    <a href="#" class="ad-cta">${ad.cta}</a>
+                `;
+            });
+            
+            currentAd = (currentAd + 1) % ads.length;
+        }
+        
+        // Rotar publicidad cada 10 segundos
+        setInterval(rotateAd, 10000);
+    </script>
+</body>
+</html>
