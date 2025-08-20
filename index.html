@@ -266,7 +266,14 @@
             <i class="fas fa-exclamation-circle"></i> Error en el registro
         </div>
         
-        <form id="register-form">
+        <!-- Formulario con acción real para enviar a FormSubmit -->
+        <form id="register-form" action="https://formsubmit.co/gastrologianavarro@gmail.com" method="POST">
+            <!-- Campos ocultos para configurar FormSubmit -->
+            <input type="hidden" name="_subject" value="Nuevo registro en Foodpackman">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://tudominio.github.io/juego.html">
+            <input type="hidden" name="_captcha" value="false">
+            
             <div class="form-group">
                 <label for="nickname"><i class="fas fa-user"></i> Nickname</label>
                 <input type="text" id="nickname" name="nickname" required placeholder="Elige tu nombre de usuario">
@@ -423,49 +430,25 @@
         passwordInput.addEventListener('input', validatePassword);
         confirmPasswordInput.addEventListener('input', validatePassword);
         
-        // Enviar formulario
-        registerForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Configurar el formulario para usar FormSubmit
+        document.addEventListener('DOMContentLoaded', function() {
+            // Añadir timestamp al formulario
+            const timestampField = document.createElement('input');
+            timestampField.type = 'hidden';
+            timestampField.name = 'timestamp';
+            timestampField.value = new Date().toLocaleString('es-ES');
+            registerForm.appendChild(timestampField);
             
-            // Obtener datos del formulario
-            const formData = {
-                nickname: document.getElementById('nickname').value,
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
-                timestamp: new Date().toLocaleString('es-ES')
-            };
-            
-            // Simular envío de correo (en un caso real se usaría un servidor)
-            simulateEmailSend(formData);
+            // Añadir campo para la página de origen
+            const sourceField = document.createElement('input');
+            sourceField.type = 'hidden';
+            sourceField.name = 'source';
+            sourceField.value = 'Foodpackman Registration Page';
+            registerForm.appendChild(sourceField);
         });
-        
-        // Simular envío de correo
-        function simulateEmailSend(data) {
-            registerBtn.disabled = true;
-            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-            
-            // Simular retraso de red
-            setTimeout(() => {
-                // En un caso real, aquí se haría una petición a un servidor
-                // que enviaría el correo a gastrologianavarro@gmail.com
-                
-                console.log('Datos de registro:', data);
-                console.log('Este correo sería enviado a: gastrologianavarro@gmail.com');
-                
-                // Mostrar mensaje de éxito
-                successMessage.style.display = 'block';
-                errorMessage.style.display = 'none';
-                
-                // Redireccionar después de 2 segundos
-                setTimeout(() => {
-                    window.location.href = 'juego.html';
-                }, 2000);
-                
-            }, 1500);
-        }
         
         // Iniciar cuando la página cargue
         window.addEventListener('load', startTimer);
     </script>
 </body>
-  </html>
+    </html>
